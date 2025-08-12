@@ -1,0 +1,32 @@
+{
+  "coupleName": "ชื่อเธอ & ชื่อฉัน",
+  "startDate": "2020-05-15",
+  "mainImage": "images/main.jpg",
+  "surpriseMusic": "music/- Three Man Down _Official MV_.mp3", 
+  "background": {
+    "type": "image",
+    "value": "images/background_love.jpg"
+  },
+  "timeline": [
+    {
+      "date": "2020-05-15",
+      "image": "images/timeline1.jpg",
+      "text": "วันแรกที่เราได้รู้จักกัน! ✨"
+    },
+    {
+      "date": "2021-05-15",
+      "image": "images/timeline2.jpg",
+      "text": "ครบรอบ 1 ปี! 💖"
+    },
+    {
+      "date": "2022-02-14",
+      "image": "https://placehold.co/400x300/e0b4b4/ffffff?text=Valentine's%20Day",
+      "text": "วาเลนไทน์แรกของเรา 💐"
+    },
+    {
+      "date": "2023-11-01",
+      "image": "https://placehold.co/400x300/b4e0d4/ffffff?text=Our%20Trip",
+      "text": "ทริปต่างจังหวัดที่แสนสนุก 🏞️"
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Gallery 📸</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid #f06292; /* Matching theme color */
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar">
+        <div class="sidebar-header">Anniversary ❤️</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <!-- ลบลิงก์ Timeline ออก -->
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="surprise.html">Surprise!</a></li>
+        </ul>
+        <footer class="text-center text-white text-sm mt-auto py-4">Made with ❤️</footer>
+    </aside>
+    <!-- End Sidebar Navigation -->
+
+    <!-- Hamburger Menu Toggle for Mobile -->
+    <button id="menu-toggle" class="md:hidden">☰</button>
+    <!-- Overlay for when sidebar is open on mobile -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-content-wrapper">
+        <main class="flex-grow flex items-center justify-center p-4">
+            <div id="gallery-content" class="container bg-white p-8 md:p-12 rounded-3xl shadow-xl text-center max-w-4xl transform transition-all duration-500 animate-fade-in">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-pink-600 mb-8 drop-shadow-lg" style="font-family: 'Sriracha', cursive;">Our Photo Gallery 📸</h1>
+                <div id="photo-grid" class="gallery-grid">
+                    <!-- Photo items will be injected here by JavaScript -->
+                    <p class="text-xl text-gray-700 animate-pulse">Loading gallery...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- End Main Content Wrapper -->
+
+    <script src="js/configLoader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menu-toggle');
+            const overlay = document.getElementById('overlay');
+            const navLinks = document.querySelectorAll('#sidebar ul li a');
+            const body = document.body; // Select the body element
+
+            // Function to apply background from config
+            const applyBackground = (backgroundConfig) => {
+                if (!backgroundConfig) return;
+
+                body.style.backgroundImage = ''; // Clear previous background
+                body.style.backgroundColor = '';
+                body.style.background = ''; // Clear gradient
+
+                if (backgroundConfig.type === 'image') {
+                    body.style.backgroundImage = `url('${backgroundConfig.value}')`;
+                    body.style.backgroundSize = 'cover';
+                    body.style.backgroundPosition = 'center center';
+                    body.style.backgroundRepeat = 'no-repeat';
+                    body.style.backgroundAttachment = 'fixed';
+                } else if (backgroundConfig.type === 'color') {
+                    body.style.backgroundColor = backgroundConfig.value;
+                } else if (backgroundConfig.type === 'gradient') {
+                    body.style.background = backgroundConfig.value;
+                }
+            };
+
+            // Set initial sidebar state based on screen width (hidden on mobile)
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('sidebar-hidden-mobile');
+            }
+
+            // Toggle sidebar for mobile
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('sidebar-open');
+                overlay.classList.toggle('visible');
+            });
+
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('visible');
+            });
+
+            // Close sidebar when a link is clicked (on mobile)
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('sidebar-open');
+                        overlay.classList.remove('visible');
+                    }
+                });
+            });
+
+            // Handle active link
+            const currentPath = window.location.pathname.split('/').pop();
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            const config = await loadConfig(); // Load config if needed for other parts
+
+            if (config) {
+                applyBackground(config.background); // Apply background from config
+            }
+
+            const photoGrid = document.getElementById('photo-grid');
+
+            // Sample photos for the gallery. You can replace these with your actual image paths.
+            const galleryPhotos = [
+                { src: "images/tenor_1.gif", caption: "Our first date!" }, // Make sure these image paths exist
+                { src: "images/4cbe8d_f1ed2800a49649848102c68fc5a66e53mv2.webp", caption: "Vacation in Phuket 🏝️" },
+                { src: "images/o3428jgpv5NWJ1ATlBA-o.jpg", caption: "Our cozy movie night" },
+                { src: "images/o3428jgpv5NWJ1ATlBA-o.jpg", caption: "Hiking trip adventure" },
+                { src: "images/o3428jgpv5NWJ1ATlBA-o.jpg", caption: "My birthday party" },
+                { src: "images/o3428jgpv5NWJ1ATlBA-o.jpg", caption: "Our first anniversary" }
+            ];
+
+            if (galleryPhotos && galleryPhotos.length > 0) {
+                photoGrid.innerHTML = ''; // Clear loading text
+                galleryPhotos.forEach(photo => {
+                    const item = document.createElement('div');
+                    item.classList.add('gallery-item');
+                    item.innerHTML = `
+                        <img src="${photo.src}" onerror="this.src='https://placehold.co/400x300/FFD1DC/663399?text=Image%20Error'" alt="${photo.caption}">
+                        <div class="p-4">
+                            <p class="text-gray-700 text-sm md:text-base">${photo.caption}</p>
+                        </div>
+                    `;
+                    photoGrid.appendChild(item);
+                });
+            } else {
+                photoGrid.innerHTML = '<p class="text-xl text-red-700">No photos to display yet. Let\'s add some memories!</p>';
+            }
+        });
+    </script>
+</body>
+</html>

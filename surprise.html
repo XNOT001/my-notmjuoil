@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise for You! 🎉</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS for the falling effects */
+        .falling-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .falling-element {
+            position: absolute;
+            background-color: transparent;
+            animation: fall linear infinite;
+            opacity: 0;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotateZ(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotateZ(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Subtle bounce for headings */
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .animate-bounce {
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+
+        /* Fade-in animation for content */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        /* Pulse for the button */
+        @keyframes button-pulse {
+            0% { transform: scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
+            100% { transform: scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        }
+        .animate-button-pulse {
+            animation: button-pulse 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative">
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar">
+        <div class="sidebar-header">Anniversary ❤️</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <!-- ลบลิงก์ Timeline ออก -->
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="surprise.html">Surprise!</a></li>
+        </ul>
+        <footer class="text-center text-white text-sm mt-auto py-4">Made with ❤️</footer>
+    </aside>
+    <!-- End Sidebar Navigation -->
+
+    <!-- Hamburger Menu Toggle for Mobile -->
+    <button id="menu-toggle" class="md:hidden">☰</button>
+    <!-- Overlay for when sidebar is open on mobile -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-content-wrapper">
+        <div class="falling-container" id="falling-container"></div>
+
+        <main class="flex-grow flex items-center justify-center p-4 z-20">
+            <div id="surprise-content" class="container bg-white p-8 md:p-12 rounded-3xl shadow-xl text-center max-w-2xl transform transition-all duration-500 hover:scale-105 animate-fade-in">
+                <h1 class="text-5xl md:text-6xl font-extrabold text-purple-600 mb-6 drop-shadow-lg animate-bounce" style="font-family: 'Charm', cursive;">A Special Surprise!</h1>
+                <p class="text-xl md:text-2xl text-gray-700 mb-8 animate-fade-in">Press play for a musical treat! 🎶</p>
+                <audio id="surprise-audio" loop></audio>
+                <button id="play-pause-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-pink-300 animate-button-pulse">
+                    <span id="play-pause-icon">▶️</span> Play Music
+                </button>
+            </div>
+        </main>
+    </div>
+    <!-- End Main Content Wrapper -->
+
+    <script src="js/configLoader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menu-toggle');
+            const overlay = document.getElementById('overlay');
+            const navLinks = document.querySelectorAll('#sidebar ul li a');
+            const body = document.body; // Select the body element
+
+            // Function to apply background from config
+            const applyBackground = (backgroundConfig) => {
+                if (!backgroundConfig) return;
+
+                body.style.backgroundImage = ''; // Clear previous background
+                body.style.backgroundColor = '';
+                body.style.background = ''; // Clear gradient
+
+                if (backgroundConfig.type === 'image') {
+                    body.style.backgroundImage = `url('${backgroundConfig.value}')`;
+                    body.style.backgroundSize = 'cover';
+                    body.style.backgroundPosition = 'center center';
+                    body.style.backgroundRepeat = 'no-repeat';
+                    body.style.backgroundAttachment = 'fixed';
+                } else if (backgroundConfig.type === 'color') {
+                    body.style.backgroundColor = backgroundConfig.value;
+                } else if (backgroundConfig.type === 'gradient') {
+                    body.style.background = backgroundConfig.value;
+                }
+            };
+
+            // Set initial sidebar state based on screen width (hidden on mobile)
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('sidebar-hidden-mobile');
+            }
+
+            // Toggle sidebar for mobile
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('sidebar-open');
+                overlay.classList.toggle('visible');
+            });
+
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('visible');
+            });
+
+            // Close sidebar when a link is clicked (on mobile)
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('sidebar-open');
+                        overlay.classList.remove('visible');
+                    }
+                });
+            });
+
+            // Handle active link
+            const currentPath = window.location.pathname.split('/').pop();
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            const config = await loadConfig();
+
+            if (config) {
+                applyBackground(config.background); // Apply background from config
+
+                const audio = document.getElementById('surprise-audio');
+                audio.src = config.surpriseMusic;
+
+                const playPauseButton = document.getElementById('play-pause-button');
+                const playPauseIcon = document.getElementById('play-pause-icon');
+                let isPlaying = false;
+
+                // Function to play/pause audio safely after user interaction
+                function togglePlayPause() {
+                    if (isPlaying) {
+                        audio.pause();
+                        playPauseIcon.textContent = '▶️';
+                        playPauseButton.innerHTML = '<span id="play-pause-icon">▶️</span> Play Music';
+                        playPauseButton.classList.add('animate-button-pulse'); // Restart pulse on pause
+                    } else {
+                        audio.play().catch(e => console.error("Audio play failed:", e));
+                        playPauseIcon.textContent = '⏸️';
+                        playPauseButton.innerHTML = '<span id="play-pause-icon">⏸️</span> Pause Music';
+                        playPauseButton.classList.remove('animate-button-pulse'); // Stop pulse on play
+                    }
+                    isPlaying = !isPlaying;
+                }
+
+                playPauseButton.addEventListener('click', togglePlayPause);
+
+                // Falling elements logic
+                const fallingContainer = document.getElementById('falling-container');
+                const elementsToCreate = ['💖', '🌸', '✨', '❤️', '💕']; // Emojis for falling elements
+
+                function createFallingElement() {
+                    const element = document.createElement('div');
+                    element.classList.add('falling-element');
+                    element.innerHTML = elementsToCreate[Math.floor(Math.random() * elementsToCreate.length)];
+                    element.style.left = `${Math.random() * 100}vw`;
+                    element.style.fontSize = `${Math.random() * 3 + 1.5}vw`; // 1.5vw to 4.5vw for responsive sizing
+                    element.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5-10s
+                    element.style.animationDelay = `-${Math.random() * 5}s`; // Stagger delay to make them appear immediately
+
+                    fallingContainer.appendChild(element);
+
+                    // Remove element after animation ends to prevent DOM overload
+                    element.addEventListener('animationend', () => {
+                        element.remove();
+                    });
+                }
+
+                // Generate a new falling element every 300ms for continuous flow
+                setInterval(createFallingElement, 300);
+
+            } else {
+                const surpriseContent = document.getElementById('surprise-content');
+                surpriseContent.innerHTML = `
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-red-600 mb-6 drop-shadow-lg">Error!</h1>
+                    <p class="text-xl md:text-2xl text-gray-700 mb-4">Failed to load configuration. Please check config.json and music path.</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
