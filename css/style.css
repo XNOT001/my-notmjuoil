@@ -11,8 +11,31 @@ body {
     /* Background settings are now controlled by JavaScript from config.json */
     color: #4a4a4a;
     overflow-x: hidden; /* Prevent horizontal scroll */
+    /* Removed: overflow-y: hidden; เพื่อให้สามารถเลื่อนได้ */
     display: flex; /* Use flexbox for sidebar and content layout */
     min-height: 100vh; /* Ensure body takes full viewport height */
+
+    /* Custom scrollbar styles for WebKit browsers (Chrome, Safari, Edge) */
+    &::-webkit-scrollbar {
+        width: 8px; /* ความกว้างของแถบเลื่อน */
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent; /* ทำให้พื้นหลังของแถบเลื่อนโปร่งใส */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2); /* สีของ thumb (ส่วนที่เลื่อนได้) แบบโปร่งใส */
+        border-radius: 10px; /* ทำให้ thumb มีขอบโค้ง */
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.4); /* สีของ thumb เมื่อ hover */
+    }
+
+    /* Custom scrollbar styles for Firefox */
+    scrollbar-width: thin; /* ทำให้แถบเลื่อนบางลง */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* สีของ thumb และ track */
 }
 
 /* Side Navigation Bar styles */

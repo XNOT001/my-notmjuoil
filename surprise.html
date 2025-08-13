@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Surprise for You! 🎉</title>
+    <title>เพลงโปรดกับคนโปร 🎉</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* CSS for the falling effects */
+        
         .falling-container {
             position: absolute;
             top: 0;
@@ -44,7 +44,7 @@
             }
         }
 
-        /* Subtle bounce for headings */
+        
         @keyframes bounce {
             0%, 100% {
                 transform: translateY(0);
@@ -57,7 +57,7 @@
             animation: bounce 1.5s infinite ease-in-out;
         }
 
-        /* Fade-in animation for content */
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -66,7 +66,7 @@
             animation: fadeIn 1s ease-out forwards;
         }
 
-        /* Pulse for the button */
+        
         @keyframes button-pulse {
             0% { transform: scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
             50% { transform: scale(1.05); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
@@ -78,25 +78,25 @@
     </style>
 </head>
 <body class="min-h-screen relative">
-    <!-- Sidebar Navigation -->
+    
     <aside id="sidebar">
         <div class="sidebar-header">Anniversary ❤️</div>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <!-- ลบลิงก์ Timeline ออก -->
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="surprise.html">Surprise!</a></li>
+            
+            <li><a href="gallery.html">ความทรงจำ</a></li>
+            <li><a href="surprise.html">เพลงโปรดกับเธอคนโปรด</a></li>
         </ul>
         <footer class="text-center text-white text-sm mt-auto py-4">Made with ❤️</footer>
     </aside>
-    <!-- End Sidebar Navigation -->
+    
 
-    <!-- Hamburger Menu Toggle for Mobile -->
+    
     <button id="menu-toggle" class="md:hidden">☰</button>
-    <!-- Overlay for when sidebar is open on mobile -->
+    
     <div id="overlay" class="overlay"></div>
 
-    <!-- Main Content Wrapper -->
+    
     <div class="main-content-wrapper">
         <div class="falling-container" id="falling-container"></div>
 
@@ -111,7 +111,7 @@
             </div>
         </main>
     </div>
-    <!-- End Main Content Wrapper -->
+    
 
     <script src="js/configLoader.js"></script>
     <script>
@@ -120,15 +120,15 @@
             const menuToggle = document.getElementById('menu-toggle');
             const overlay = document.getElementById('overlay');
             const navLinks = document.querySelectorAll('#sidebar ul li a');
-            const body = document.body; // Select the body element
+            const body = document.body; 
 
-            // Function to apply background from config
+            
             const applyBackground = (backgroundConfig) => {
                 if (!backgroundConfig) return;
 
-                body.style.backgroundImage = ''; // Clear previous background
+                body.style.backgroundImage = ''; 
                 body.style.backgroundColor = '';
-                body.style.background = ''; // Clear gradient
+                body.style.background = ''; 
 
                 if (backgroundConfig.type === 'image') {
                     body.style.backgroundImage = `url('${backgroundConfig.value}')`;
@@ -143,12 +143,12 @@
                 }
             };
 
-            // Set initial sidebar state based on screen width (hidden on mobile)
+            
             if (window.innerWidth <= 768) {
                 sidebar.classList.add('sidebar-hidden-mobile');
             }
 
-            // Toggle sidebar for mobile
+            
             menuToggle.addEventListener('click', () => {
                 sidebar.classList.toggle('sidebar-open');
                 overlay.classList.toggle('visible');
@@ -159,7 +159,7 @@
                 overlay.classList.remove('visible');
             });
 
-            // Close sidebar when a link is clicked (on mobile)
+            
             navLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth <= 768) {
@@ -169,7 +169,7 @@
                 });
             });
 
-            // Handle active link
+            
             const currentPath = window.location.pathname.split('/').pop();
             navLinks.forEach(link => {
                 if (link.getAttribute('href') === currentPath) {
@@ -182,7 +182,7 @@
             const config = await loadConfig();
 
             if (config) {
-                applyBackground(config.background); // Apply background from config
+                applyBackground(config.background); 
 
                 const audio = document.getElementById('surprise-audio');
                 audio.src = config.surpriseMusic;
@@ -191,46 +191,46 @@
                 const playPauseIcon = document.getElementById('play-pause-icon');
                 let isPlaying = false;
 
-                // Function to play/pause audio safely after user interaction
+                
                 function togglePlayPause() {
                     if (isPlaying) {
                         audio.pause();
                         playPauseIcon.textContent = '▶️';
                         playPauseButton.innerHTML = '<span id="play-pause-icon">▶️</span> Play Music';
-                        playPauseButton.classList.add('animate-button-pulse'); // Restart pulse on pause
+                        playPauseButton.classList.add('animate-button-pulse'); 
                     } else {
                         audio.play().catch(e => console.error("Audio play failed:", e));
                         playPauseIcon.textContent = '⏸️';
                         playPauseButton.innerHTML = '<span id="play-pause-icon">⏸️</span> Pause Music';
-                        playPauseButton.classList.remove('animate-button-pulse'); // Stop pulse on play
+                        playPauseButton.classList.remove('animate-button-pulse'); 
                     }
                     isPlaying = !isPlaying;
                 }
 
                 playPauseButton.addEventListener('click', togglePlayPause);
 
-                // Falling elements logic
+                
                 const fallingContainer = document.getElementById('falling-container');
-                const elementsToCreate = ['💖', '🌸', '✨', '❤️', '💕']; // Emojis for falling elements
+                const elementsToCreate = ['💖', '🌸', '✨', '❤️', '💕']; 
 
                 function createFallingElement() {
                     const element = document.createElement('div');
                     element.classList.add('falling-element');
                     element.innerHTML = elementsToCreate[Math.floor(Math.random() * elementsToCreate.length)];
                     element.style.left = `${Math.random() * 100}vw`;
-                    element.style.fontSize = `${Math.random() * 3 + 1.5}vw`; // 1.5vw to 4.5vw for responsive sizing
-                    element.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5-10s
-                    element.style.animationDelay = `-${Math.random() * 5}s`; // Stagger delay to make them appear immediately
+                    element.style.fontSize = `${Math.random() * 3 + 1.5}vw`; 
+                    element.style.animationDuration = `${Math.random() * 5 + 5}s`; 
+                    element.style.animationDelay = `-${Math.random() * 5}s`; 
 
                     fallingContainer.appendChild(element);
 
-                    // Remove element after animation ends to prevent DOM overload
+                    
                     element.addEventListener('animationend', () => {
                         element.remove();
                     });
                 }
 
-                // Generate a new falling element every 300ms for continuous flow
+                
                 setInterval(createFallingElement, 300);
 
             } else {

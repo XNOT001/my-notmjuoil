@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Specific animations for home page if needed, otherwise general ones from style.css */
+
         .image-hover-effect:hover {
-            transform: scale(1.03) rotate(1deg); /* Slight scale and rotate on hover */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* More prominent shadow on hover */
+            transform: scale(1.03) rotate(1deg); 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); 
         }
-        /* CSS for the alert box */
+        
         @keyframes fade-in-down {
             from { opacity: 0; transform: translate(-50%, -20px); }
             to { opacity: 1; transform: translate(-50%, 0); }
@@ -26,41 +26,41 @@
     </style>
 </head>
 <body class="min-h-screen">
-    <!-- Loading Screen -->
+    
     <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-pink-100 z-[9999] opacity-100 transition-opacity duration-500">
         <h1 class="text-4xl md:text-5xl font-extrabold text-pink-600 animate-pulse-grow" style="font-family: 'Charm', cursive;">Loading...</h1>
     </div>
-    <!-- End Loading Screen -->
+    
 
-    <!-- Sidebar Navigation -->
+    
     <aside id="sidebar">
         <div class="sidebar-header">Anniversary ❤️</div>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <!-- ลบลิงก์ Timeline ออก -->
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="surprise.html">Surprise!</a></li>
+            
+            <li><a href="gallery.html">ความทรงจำ</a></li>
+            <li><a href="surprise.html">เพลงโปรดกับเธอคนโปรด</a></li>
         </ul>
-        <footer class="text-center text-white text-sm mt-auto py-4">Made with ❤️</footer>
+        <footer class="text-center text-white text-sm mt-auto py-4">ร้าน Noipoko ❤️</footer>
     </aside>
-    <!-- End Sidebar Navigation -->
+    
 
-    <!-- Hamburger Menu Toggle for Mobile -->
+    
     <button id="menu-toggle" class="md:hidden">☰</button>
-    <!-- Overlay for when sidebar is open on mobile -->
+    
     <div id="overlay" class="overlay"></div>
 
-    <!-- Main Content Wrapper -->
+    
     <div class="main-content-wrapper">
         <main class="flex-grow flex items-center justify-center p-4">
             <div id="home-content" class="container bg-white p-8 md:p-12 rounded-3xl shadow-xl text-center max-w-2xl transform transition-all duration-500 animate-fade-in animate-pulse-grow">
-                <!-- Content will be loaded here by JavaScript -->
+                
                 <h1 class="text-5xl md:text-6xl font-extrabold text-pink-600 mb-6 drop-shadow-lg">Loading...</h1>
                 <p class="text-xl md:text-2xl text-gray-700 mb-4 animate-pulse">Initializing website...</p>
             </div>
         </main>
     </div>
-    <!-- End Main Content Wrapper -->
+    
 
     <script src="js/configLoader.js"></script>
     <script>
@@ -70,15 +70,15 @@
             const menuToggle = document.getElementById('menu-toggle');
             const overlay = document.getElementById('overlay');
             const navLinks = document.querySelectorAll('#sidebar ul li a');
-            const body = document.body; // Select the body element
+            const body = document.body; 
 
-            // Function to apply background from config
+            
             const applyBackground = (backgroundConfig) => {
                 if (!backgroundConfig) return;
 
-                body.style.backgroundImage = ''; // Clear previous background
+                body.style.backgroundImage = ''; 
                 body.style.backgroundColor = '';
-                body.style.background = ''; // Clear gradient
+                body.style.background = ''; 
 
                 if (backgroundConfig.type === 'image') {
                     body.style.backgroundImage = `url('${backgroundConfig.value}')`;
@@ -93,12 +93,12 @@
                 }
             };
 
-            // Set initial sidebar state based on screen width (hidden on mobile)
+            
             if (window.innerWidth <= 768) {
                 sidebar.classList.add('sidebar-hidden-mobile');
             }
 
-            // Toggle sidebar for mobile
+            
             menuToggle.addEventListener('click', () => {
                 sidebar.classList.toggle('sidebar-open');
                 overlay.classList.toggle('visible');
@@ -109,7 +109,7 @@
                 overlay.classList.remove('visible');
             });
 
-            // Close sidebar when a link is clicked (on mobile)
+            
             navLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth <= 768) {
@@ -119,7 +119,7 @@
                 });
             });
 
-            // Handle active link
+            
             const currentPath = window.location.pathname.split('/').pop();
             navLinks.forEach(link => {
                 if (link.getAttribute('href') === currentPath || (currentPath === '' && link.getAttribute('href') === 'index.html')) {
@@ -133,20 +133,20 @@
             const config = await loadConfig();
 
             if (config) {
-                applyBackground(config.background); // Apply background from config
+                applyBackground(config.background); 
 
                 const startDate = new Date(config.startDate);
                 const today = new Date();
 
-                // Calculate days together
+                
                 const diffTime = Math.abs(today.getTime() - startDate.getTime());
                 const daysTogether = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                // Calculate days until next anniversary
+                
                 let nextAnniversaryYear = today.getFullYear();
                 let nextAnniversaryDate = new Date(nextAnniversaryYear, startDate.getMonth(), startDate.getDate());
 
-                // If this year's anniversary has already passed, set it for next year
+                
                 if (today > nextAnniversaryDate) {
                     nextAnniversaryYear++;
                     nextAnniversaryDate = new Date(nextAnniversaryYear, startDate.getMonth(), startDate.getDate());
@@ -161,13 +161,11 @@
                     <p class="text-xl md:text-2xl text-gray-700 mb-4 animate-fade-in animate-bounce-subtle">A special place for us, <span class="font-bold text-red-500">${config.coupleName}</span></p>
                     <img id="main-image" src="${config.mainImage}" onerror="this.src='https://placehold.co/600x400/FFD1DC/663399?text=Main%20Image'" alt="Our main memory" class="w-full md:w-3/4 mx-auto rounded-2xl shadow-lg mt-6 mb-8 object-cover h-64 md:h-80 transform transition-transform duration-300 image-hover-effect">
                     <div class="text-lg md:text-xl text-gray-600 space-y-3 animate-fade-in">
-                        <p id="start-date-display"><span class="font-semibold text-red-500">Started dating:</span> ${new Date(config.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                        <p id="days-together"><span class="font-semibold text-red-500">Days together:</span> <span class="text-2xl md:text-3xl font-bold text-pink-600">${daysTogether}</span> days!</p>
-                        <p id="next-anniversary"><span class="font-semibold text-red-500">Next anniversary in:</span> <span class="text-2xl md:text-3xl font-bold text-pink-600">${daysUntilNextAnniversary}</span> days!</p>
+                        <p id="start-date-display"><span class="font-semibold text-red-500">วันแรกที่คบกัน:</span> ${new Date(config.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        <p id="days-together"><span class="font-semibold text-red-500">วันที่เราอยู่ด้วยกัน:</span> <span class="text-2xl md:text-3xl font-bold text-pink-600">${daysTogether}</span> วัน!</p>
                     </div>
-                    <button onclick="copyShareLink()" class="mt-8 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full shadow-md transform transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-300 animate-fade-in">
-                        Share This Page 💖
-                    </button>
+                    
+                    
                 `;
             } else {
                 const homeContent = document.getElementById('home-content');
@@ -176,8 +174,7 @@
                     <p class="text-xl md:text-2xl text-gray-700 mb-4">Failed to load configuration. Please check config.json and image paths.</p>
                 `;
             }
-
-            // Hide Loading Screen after content is loaded (or error)
+            
             loadingScreen.classList.add('hidden');
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
